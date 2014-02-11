@@ -13,7 +13,7 @@ def create_hash_table(path):
         word_list.sort()
         word_key = "".join(word_list)
         hash_table[word_key].append(word)
-        
+
     dictionary.close()
 
     return hash_table
@@ -50,7 +50,6 @@ def print_sets(sets_table):
     file.close()
 
 def main():
-
     hash_table = create_hash_table('/usr/share/dict/words')
     sets = count_anagram_sets(hash_table)
     sets_table = setup_sets_table(hash_table)
