@@ -1,29 +1,29 @@
 # Anagram Unit Tests
 # Nayef Copty
 
-from collections import defaultdict
-import anagram
+import os
+import tempfile
 import unittest
-import os.path
+
+import anagram
+
 
 class AnagramTests(unittest.TestCase):
 
-    def __init__(self, methodname='runTest'):
-        unittest.TestCase.__init__(self, methodname)
-        self.hashtable = None
-        self.test_create_hash_table()
+    @classmethod
+    def setUpClass(cls):
+        cls.fd, cls.path = tempfile.mkstemp()
+        content = ('team\n' 'meat\n' 'mate\n' 'tame\n' 'hello\n' 'ellho\n')
+        with open(cls.path, 'w') as f:
+            f.write(content)
+        cls.hashtable = anagram.create_hash_table(cls.path)
+
+    @classmethod
+    def tearDownClass(cls):
+        os.close(cls.fd)
+        os.remove(cls.path)
 
     def test_create_hash_table(self):
-        file = open('test.txt', 'w')
-        file.write('team\n')
-        file.write('meat\n')
-        file.write('mate\n')
-        file.write('tame\n')
-        file.write('hello\n')
-        file.write('ellho\n')
-        file.close()
-
-        self.hashtable = anagram.create_hash_table('test.txt')
         self.assertEqual(len(self.hashtable), 2)
 
         keys = self.hashtable.keys()
@@ -70,7 +70,6 @@ class AnagramTests(unittest.TestCase):
         self.assertTrue('mate' in largest_set)
         self.assertTrue('tame' in largest_set)
 
-        smallest_set = lists[1]
         self.assertTrue('hello' in lists[1])
         self.assertTrue('ellho' in lists[1])
 
